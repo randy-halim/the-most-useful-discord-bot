@@ -8,7 +8,7 @@ client.on("ready", () => {
 
 client.on("message", (message) => {
   try {
-    if (message.content === "ping") {
+    if (message.content === "!ping") {
       let uptime = process.uptime();
       const hours = Math.floor(uptime / 3600);
       uptime %= 3600;
@@ -28,8 +28,32 @@ client.on("message", (message) => {
         })
       );
     }
-    if (message.content.toLowerCase().includes("broken")) {
+    if (message.content === "!about")
+      message.channel.send(
+        new MessageEmbed({
+          title: "About that crisis...",
+          url: "https://www.instagram.com/fc.randy.h/",
+          description:
+            "This bot was made with two brain cells. You don't want to look at the source code, it reflects my existential crisis right now.\nversion 0.0.0.1 i guess? i update it whenever",
+          author: {
+            name: "randy's existential crisis",
+            url: "https://www.github.com/randy-halim/",
+          },
+        })
+      );
+    if (
+      message.content.toLowerCase().includes("broken") &&
+      Math.random() <= 0.45
+    )
       message.reply("did you turn it off and on again?");
+    if (!message.author.bot && Math.random() <= 0.1) {
+      const occurrencesOfE = (message.content.match(/e/g) || []).length;
+      if (occurrencesOfE === 0) return;
+      message.channel.startTyping();
+      setTimeout(() => {
+        message.channel.stopTyping();
+        message.channel.send(`**${"e".repeat(occurrencesOfE)}**`);
+      }, 250 * occurrencesOfE);
     }
   } catch (error) {
     message.channel.send(
